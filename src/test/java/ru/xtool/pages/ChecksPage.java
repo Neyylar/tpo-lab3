@@ -8,6 +8,5 @@ public class ChecksPage {
     private SelenideDriver driver;
     public ChecksPage(SelenideDriver driver) {
         this.driver = driver;
-        System.out.println("test" + driver);
     }
 }

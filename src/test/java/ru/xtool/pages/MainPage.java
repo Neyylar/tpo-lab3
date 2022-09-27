@@ -12,7 +12,7 @@ public class MainPage {
     public SelenideElement loginButton;
     public MainPage(SelenideDriver driver) {
         this.driver = driver;
-        System.out.println("test" + driver);
+        findLoginFields();
     }
     private void findLoginFields(){
         form = driver.$x("//descendant::form[contains(@class, 'form-login')]");
@@ -22,7 +22,6 @@ public class MainPage {
     }
 
     public void sendLoginData() {
-        findLoginFields();
         usernameField.scrollTo().click();
         usernameField.sendKeys("natashata7sen@gmail.com");
         passwordField.scrollTo().click();
@@ -31,11 +30,16 @@ public class MainPage {
     }
 
     public void sendIncorrectLoginData() {
-        findLoginFields();
         usernameField.scrollTo().click();
         usernameField.sendKeys("natashata7sen@gmail.com");
         passwordField.scrollTo().click();
         passwordField.sendKeys("12345678");
         loginButton.click();
+    }
+    public String getEmailLoginBLock(){
+        return driver.$x("//div[contains(@class, 'login-block')]/div/div/span[contains(@class, 'text-primary')]").getText();
+    }
+    public String getLoginButtonText(){
+        return loginButton.getText();
     }
 }

@@ -11,6 +11,8 @@ import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 public class LoginTest {
   static SelenideDriver chrome;
   static SelenideDriver firefox;
@@ -33,6 +35,7 @@ public class LoginTest {
     MainPage mainPage = new MainPage(driver);
     driver.open(MainPage.url);
     mainPage.sendLoginData();
+    assertEquals(mainPage.getEmailLoginBLock(), "natashata7sen@gmail.com");
   }
 
   @ParameterizedTest
@@ -41,6 +44,7 @@ public class LoginTest {
     MainPage mainPage = new MainPage(driver);
     driver.open(MainPage.url);
     mainPage.sendIncorrectLoginData();
+    assertEquals(driver.switchTo().alert().getText(), "Не верно задан пароль");
   }
 }
 

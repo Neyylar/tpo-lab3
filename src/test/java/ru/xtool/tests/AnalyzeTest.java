@@ -26,68 +26,48 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.Keys;
-import ru.xtool.pages.AccountPage;
-import ru.xtool.pages.MainPage;
-import ru.xtool.pages.TokensPage;
+import ru.xtool.pages.*;
 
 import java.util.*;
 import java.net.MalformedURLException;
 import java.net.URL;
-public class BuyTokensTest {
+public class AnalyzeTest {
   private static SelenideDriver driver = new SelenideDriver(new SelenideConfig().browser("chrome").browserSize("1280x1024").timeout(20000));
+  private static AnalyzePage analyzePage;
   private static MainPage mainPage;
-  private static TokensPage tokensPage;
+  private static AccountPage accountPage;
+  static void openAnalyzePage() {
+    analyzePage = new AnalyzePage(driver);
+    driver.open(AnalyzePage.url);
+  }
   static void login() {
     mainPage = new MainPage(driver);
+    accountPage = new AccountPage(driver);
     driver.open(MainPage.url);
     mainPage.sendLoginData();
     sleep(1000);
   }
-  static void openTokenPage() {
-    tokensPage = new TokensPage(driver);
-    driver.open(TokensPage.url);
-  }
-  //TODO check driver redirect!
   @Test
   @Order(1)
-  public void testBuyTokensAuthorized() {
-    login();
-    openTokenPage();
-    tokensPage.typeInputAmount(500);
-    tokensPage.submitPayment();
+  public void testAnalyzeCiteUnauthorized() {
+    String url = "github.com";
+    openAnalyzePage();
+    analyzePage.analyzeCite(url);
     sleep(1000);
+    assertEquals(analyzePage.getAnalyzedUrl(), url);
   }
   @Test
   @Order(1)
-  public void testBuyTokensAuthorizedWrongAmount() {
+  public void testAnalyzeCiteAuthorized() {
+    String url = "github.com";
     login();
-    openTokenPage();
-    tokensPage.typeInputAmount(100);
-    tokensPage.submitPayment();
-    assertEquals(driver.switchTo().alert().getText(), "Минимальная сумма пополнения 300 руб.");
+    openAnalyzePage();
+    analyzePage.analyzeCite(url);
+    sleep(1000);
+    assertEquals(analyzePage.getAnalyzedUrl(), url);
+    driver.open(ChecksPage.url);
+    assertEquals(accountPage.getCheckedUrl(), url);
   }
 
-  @Test
-  @Order(1)
-  public void testBuyTokensUnauthorizedWrongAmount() {
-    openTokenPage();
-    tokensPage.typeInputAmount(100);
-    tokensPage.submitPayment();
-    assertEquals(driver.switchTo().alert().getText(), "Минимальная сумма пополнения 300 руб.");
-  }
-  @Test
-  @Order(1)
-  public void testBuyTokensUnauthorizedWithoutEmail() {
-    openTokenPage();
-    tokensPage.typeInputAmount(500);
-    tokensPage.submitPayment();
-  }
-  @Test
-  @Order(1)
-  public void testBuyTokensUnauthorized() {
-    openTokenPage();
-    tokensPage.typeEmail("natashata7sen@gmail.com");
-    tokensPage.typeInputAmount(500);
-    tokensPage.submitPayment();
-  }
+
 }
