@@ -7,6 +7,8 @@ public class AccountPage {
 
     public static String url = "https://xtool.ru/account/";
     private SelenideDriver driver;
+    private final String password1 = "5LGrHF8g";
+    private final String password2 = "12345678";
     SelenideElement menu;
     SelenideElement checks;
     SelenideElement changePassTable;
@@ -36,17 +38,17 @@ public class AccountPage {
 
     public void testChangePassword() {
         newPass1.scrollTo().click();
-        newPass1.sendKeys("5LGrHF8g");
+        newPass1.sendKeys(password1);
         newPass2.scrollTo().click();
-        newPass2.sendKeys("5LGrHF8g");
+        newPass2.sendKeys(password1);
         submitPass.scrollTo().click();
     }
 
     public void testChangePasswordDifferentValues() {
         newPass1.scrollTo().click();
-        newPass1.sendKeys("5LGrHF8g");
+        newPass1.sendKeys(password1);
         newPass2.scrollTo().click();
-        newPass2.sendKeys("12345678");
+        newPass2.sendKeys(password2);
         submitPass.scrollTo().click();
     }
     public void testChangePasswordEmptyFields() {

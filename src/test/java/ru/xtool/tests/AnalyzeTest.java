@@ -12,6 +12,9 @@ import static org.hamcrest.core.IsNot.not;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.Order;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ArgumentsSource;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
@@ -36,38 +39,38 @@ public class AnalyzeTest {
   private static AnalyzePage analyzePage;
   private static MainPage mainPage;
   private static AccountPage accountPage;
-  static void openAnalyzePage() {
+  static void openAnalyzePage(SelenideDriver driver) {
     analyzePage = new AnalyzePage(driver);
     driver.open(AnalyzePage.url);
   }
-  static void login() {
+  static void login(SelenideDriver driver) {
     mainPage = new MainPage(driver);
     accountPage = new AccountPage(driver);
     driver.open(MainPage.url);
     mainPage.sendLoginData();
     sleep(1000);
   }
-  @Test
+  @ParameterizedTest(name = "[{index}] site: {0}")
+  @ArgumentsSource(WebDriverArgumentProvider.class)
   @Order(1)
-  public void testAnalyzeCiteUnauthorized() {
+  public void testAnalyzeCiteUnauthorized(SelenideDriver driver) {
     String url = "github.com";
-    openAnalyzePage();
+    openAnalyzePage(driver);
     analyzePage.analyzeCite(url);
     sleep(1000);
     assertEquals(analyzePage.getAnalyzedUrl(), url);
   }
-  @Test
-  @Order(1)
-  public void testAnalyzeCiteAuthorized() {
+  @ParameterizedTest(name = "[{index}] site: {0}")
+  @ArgumentsSource(WebDriverArgumentProvider.class)
+  @Order(2)
+  public void testAnalyzeCiteAuthorized(SelenideDriver driver) {
     String url = "github.com";
-    login();
-    openAnalyzePage();
+    login(driver);
+    openAnalyzePage(driver);
     analyzePage.analyzeCite(url);
-    sleep(1000);
+    sleep(3000);
     assertEquals(analyzePage.getAnalyzedUrl(), url);
     driver.open(ChecksPage.url);
     assertEquals(accountPage.getCheckedUrl(), url);
   }
-
-
 }

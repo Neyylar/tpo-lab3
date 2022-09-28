@@ -5,6 +5,10 @@ import com.codeborne.selenide.SelenideElement;
 
 public class MainPage {
     public static String url = "https://xtool.ru";
+    private final String email = "natashata7sen@gmail.com";
+    private final String rightPassword = "5LGrHF8g";
+    private final String wrongPassword = "12345678";
+
     private SelenideDriver driver;
     SelenideElement form;
     public SelenideElement usernameField;
@@ -23,17 +27,17 @@ public class MainPage {
 
     public void sendLoginData() {
         usernameField.scrollTo().click();
-        usernameField.sendKeys("natashata7sen@gmail.com");
+        usernameField.sendKeys(email);
         passwordField.scrollTo().click();
-        passwordField.sendKeys("5LGrHF8g");
+        passwordField.sendKeys(rightPassword);
         loginButton.click();
     }
 
     public void sendIncorrectLoginData() {
         usernameField.scrollTo().click();
-        usernameField.sendKeys("natashata7sen@gmail.com");
+        usernameField.sendKeys(email);
         passwordField.scrollTo().click();
-        passwordField.sendKeys("12345678");
+        passwordField.sendKeys(wrongPassword);
         loginButton.click();
     }
     public String getEmailLoginBLock(){
